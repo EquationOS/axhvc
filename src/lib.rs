@@ -55,6 +55,9 @@ numeric_enum! {
         /// Generally, this HVC is triggered by `shim` in the first `brk` syscall.
         HClearGuestAreas = HYPER_CALL_CODE_PRIVILEGED_MASK | 11,
 
+        /// Notify the hypervisor to boot a microVM instance.
+        HMicroVMBoot = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x20,
+
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
         /// Only for debugging purposes, console write.
@@ -96,6 +99,7 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HBenchVMCall => write!(f, "HBenchVMCall {:#x}", *self as u32),
             HyperCallCode::HBenchEPTMmap => write!(f, "HBenchEPTMmap {:#x}", *self as u32),
             HyperCallCode::HBenchEPTMUnmap => write!(f, "HBenchEPTMUnmap {:#x}", *self as u32),
+            HyperCallCode::HMicroVMBoot => write!(f, "HMicroVMBoot {:#x}", *self as u32),
         }?;
         write!(f, ")")
     }
