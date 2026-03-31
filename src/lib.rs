@@ -57,6 +57,9 @@ numeric_enum! {
 
         /// Notify the hypervisor to boot a microVM instance.
         HMicroVMBoot = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x20,
+        /// Inject an IRQ event into a running microVM from host side.
+        /// arg0: instance_id, arg1: msix_index.
+        HMicroVMInjectIrq = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x21,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -100,6 +103,9 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HBenchEPTMmap => write!(f, "HBenchEPTMmap {:#x}", *self as u32),
             HyperCallCode::HBenchEPTMUnmap => write!(f, "HBenchEPTMUnmap {:#x}", *self as u32),
             HyperCallCode::HMicroVMBoot => write!(f, "HMicroVMBoot {:#x}", *self as u32),
+            HyperCallCode::HMicroVMInjectIrq => {
+                write!(f, "HMicroVMInjectIrq {:#x}", *self as u32)
+            }
         }?;
         write!(f, ")")
     }
