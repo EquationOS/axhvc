@@ -63,6 +63,9 @@ numeric_enum! {
         /// Query the host-side posted-interrupt route for a MicroVM MSI-X entry.
         /// arg0: host physical address of EqMicroVmIrqRouteQuery.
         HMicroVMQueryIrqRoute = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x22,
+        /// Start a secondary vCPU inside the currently running microVM.
+        /// arg0: guest vCPU id, arg1: guest physical 64-bit entry point.
+        HMicroVMStartVcpu = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x23,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -111,6 +114,9 @@ impl core::fmt::Debug for HyperCallCode {
             }
             HyperCallCode::HMicroVMQueryIrqRoute => {
                 write!(f, "HMicroVMQueryIrqRoute {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMStartVcpu => {
+                write!(f, "HMicroVMStartVcpu {:#x}", *self as u32)
             }
         }?;
         write!(f, ")")
