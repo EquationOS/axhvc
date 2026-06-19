@@ -66,6 +66,9 @@ numeric_enum! {
         /// Start a secondary vCPU inside the currently running microVM.
         /// arg0: guest vCPU id, arg1: guest physical 64-bit entry point.
         HMicroVMStartVcpu = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x23,
+        /// Send a PV IPI to a vCPU inside the currently running microVM.
+        /// arg0: guest vCPU id, arg1: interrupt vector.
+        HMicroVMSendIpi = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x24,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -117,6 +120,9 @@ impl core::fmt::Debug for HyperCallCode {
             }
             HyperCallCode::HMicroVMStartVcpu => {
                 write!(f, "HMicroVMStartVcpu {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMSendIpi => {
+                write!(f, "HMicroVMSendIpi {:#x}", *self as u32)
             }
         }?;
         write!(f, ")")
