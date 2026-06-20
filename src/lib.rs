@@ -69,6 +69,12 @@ numeric_enum! {
         /// Send a PV IPI to a vCPU inside the currently running microVM.
         /// arg0: guest vCPU id, arg1: interrupt vector.
         HMicroVMSendIpi = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x24,
+        /// Set the desired online vCPU count for a MicroVM from host side.
+        /// arg0: instance_id, arg1: desired vCPU count.
+        HMicroVMSetVcpuCount = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x25,
+        /// Query vCPU limits from inside the currently running MicroVM.
+        /// Returns: low 32 bits desired vCPU count, high 32 bits max vCPU count.
+        HMicroVMGetVcpuCount = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x26,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -123,6 +129,12 @@ impl core::fmt::Debug for HyperCallCode {
             }
             HyperCallCode::HMicroVMSendIpi => {
                 write!(f, "HMicroVMSendIpi {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMSetVcpuCount => {
+                write!(f, "HMicroVMSetVcpuCount {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMGetVcpuCount => {
+                write!(f, "HMicroVMGetVcpuCount {:#x}", *self as u32)
             }
         }?;
         write!(f, ")")
