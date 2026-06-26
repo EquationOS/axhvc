@@ -75,6 +75,9 @@ numeric_enum! {
         /// Query vCPU limits from inside the currently running MicroVM.
         /// Returns: low 32 bits desired vCPU count, high 32 bits max vCPU count.
         HMicroVMGetVcpuCount = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x26,
+        /// Notify EqVisor that eqgate consumed a host VFIO mailbox vector in non-root.
+        /// arg0: notification vector, arg1: gate-side consume count.
+        HMicroVMDrainVfioMailbox = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x27,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -135,6 +138,9 @@ impl core::fmt::Debug for HyperCallCode {
             }
             HyperCallCode::HMicroVMGetVcpuCount => {
                 write!(f, "HMicroVMGetVcpuCount {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMDrainVfioMailbox => {
+                write!(f, "HMicroVMDrainVfioMailbox {:#x}", *self as u32)
             }
         }?;
         write!(f, ")")
