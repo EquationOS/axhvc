@@ -141,6 +141,10 @@ numeric_enum! {
         /// Request EqVisor to park a MicroVM back to the gate before host removal/cleanup.
         /// arg0: instance_id.
         HMicroVMStop = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x3e,
+        /// Ask the current EqGate pCPU to exit so root can synchronize its
+        /// Gate EPT alias generation before the next scheduler dequeue.
+        /// arg0: requested Gate EPT alias generation.
+        HMicroVMGateEptSync = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x3f,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -283,6 +287,9 @@ impl core::fmt::Debug for HyperCallCode {
             }
             HyperCallCode::HMicroVMStop => {
                 write!(f, "HMicroVMStop {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMGateEptSync => {
+                write!(f, "HMicroVMGateEptSync {:#x}", *self as u32)
             }
         }?;
         write!(f, ")")
