@@ -145,6 +145,14 @@ numeric_enum! {
         /// Gate EPT alias generation before the next scheduler dequeue.
         /// arg0: requested Gate EPT alias generation.
         HMicroVMGateEptSync = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x3f,
+        /// Batch logical HyperAlloc reclaim.  The guest supplies ranges that
+        /// were aggregated from LLFree allocator metadata; EqVisor unmaps
+        /// each contiguous range once and reconciles every huge frame.
+        /// arg0: guest physical address of EqHyperAllocDebugReclaimBatchReq.
+        HMicroVMHyperAllocDebugReclaimBatch = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x40,
+        /// Debug-only deterministic two-vCPU race for one READY registry GPA.
+        /// arg0: frame_gpa, arg1: barrier target (2=arm, 0=query/disarm).
+        HMicroVMHyperAllocDebugRegistryRace = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x41,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -291,6 +299,16 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HMicroVMGateEptSync => {
                 write!(f, "HMicroVMGateEptSync {:#x}", *self as u32)
             }
+            HyperCallCode::HMicroVMHyperAllocDebugReclaimBatch => write!(
+                f,
+                "HMicroVMHyperAllocDebugReclaimBatch {:#x}",
+                *self as u32
+            ),
+            HyperCallCode::HMicroVMHyperAllocDebugRegistryRace => write!(
+                f,
+                "HMicroVMHyperAllocDebugRegistryRace {:#x}",
+                *self as u32
+            ),
         }?;
         write!(f, ")")
     }
