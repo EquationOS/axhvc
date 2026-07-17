@@ -153,6 +153,9 @@ numeric_enum! {
         /// Debug-only deterministic two-vCPU race for one READY registry GPA.
         /// arg0: frame_gpa, arg1: barrier target (2=arm, 0=query/disarm).
         HMicroVMHyperAllocDebugRegistryRace = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x41,
+        /// Synchronous host-side LLFree metadata scan/resize.
+        /// arg0: guest physical address of EqHyperAllocResizeReq.
+        HMicroVMHyperAllocResize = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x42,
 
         /// Only for debugging purposes, console read.
         HRead = HYPER_CALL_CODE_PRIVILEGED_MASK | 0x11,
@@ -242,6 +245,9 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HMicroVMHyperAllocDebugReclaim => {
                 write!(f, "HMicroVMHyperAllocDebugReclaim {:#x}", *self as u32)
             }
+            HyperCallCode::HMicroVMHyperAllocResize => {
+                write!(f, "HMicroVMHyperAllocResize {:#x}", *self as u32)
+            }
             HyperCallCode::HMicroVMHyperAllocPagecacheShrinkReq => {
                 write!(
                     f,
@@ -299,16 +305,12 @@ impl core::fmt::Debug for HyperCallCode {
             HyperCallCode::HMicroVMGateEptSync => {
                 write!(f, "HMicroVMGateEptSync {:#x}", *self as u32)
             }
-            HyperCallCode::HMicroVMHyperAllocDebugReclaimBatch => write!(
-                f,
-                "HMicroVMHyperAllocDebugReclaimBatch {:#x}",
-                *self as u32
-            ),
-            HyperCallCode::HMicroVMHyperAllocDebugRegistryRace => write!(
-                f,
-                "HMicroVMHyperAllocDebugRegistryRace {:#x}",
-                *self as u32
-            ),
+            HyperCallCode::HMicroVMHyperAllocDebugReclaimBatch => {
+                write!(f, "HMicroVMHyperAllocDebugReclaimBatch {:#x}", *self as u32)
+            }
+            HyperCallCode::HMicroVMHyperAllocDebugRegistryRace => {
+                write!(f, "HMicroVMHyperAllocDebugRegistryRace {:#x}", *self as u32)
+            }
         }?;
         write!(f, ")")
     }
